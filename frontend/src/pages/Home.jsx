@@ -33,7 +33,7 @@ const Home = () => {
         {
           const result = await response.json();
           // console.log(result.data.reverse());
-          setAllPosts(result.data);
+          setAllPosts(result.data.reverse());
         }
       } catch(error) {
         alert(error);
