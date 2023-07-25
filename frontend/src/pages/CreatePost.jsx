@@ -15,9 +15,6 @@ const CreatePost = () => {
   const [generatingImg, setGeneratingImg] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = () => {
-
-  }
 
   const handleChange = (e) => {
     setForm({...form, [e.target.name]: e.target.value})
@@ -29,26 +26,55 @@ const CreatePost = () => {
   }
 
   const generateImage = async () => {
-    if(form.prompt) {
-      try{
-        setGeneratingImg(true);
-        const response = await fetch('http://localhost:8080/api/v1/app', {
-          method: 'POST',
+    try{
+
+      if(form.prompt) {
+        try{
+          setGeneratingImg(true);
+          const response = await fetch('http://localhost:8080/api/v1/app', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({prompt: form.prompt}),
+          });
+
+          const data = await response.json();
+          // console.log(data);
+
+          setForm({...form, photo:`data:image/jpeg;base64,${data.photo}`})
+        } catch(error) {
+          console.log(error);
+        } finally {
+          setGeneratingImg(false);
+        }
+      } else {
+        alert('please enter a prompt');
+      }
+    } catch(error) {
+      console.log('Error occurred:', error.message || error.response || error);
+    }
+  }
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if(form.prompt && form.photo){
+      setLoading(true);
+      try {
+        const response = await fetch('http://localhost:8080/api/v1/post', {
+          method:'POST',
           headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({prompt: form.prompt}),
-        });
+          body: JSON.stringify(form)
+        })
 
-        const data = await response.json();
-        // console.log(data);
-
-        setForm({...form, photo:`data:image/jpeg;base64,${data.photo}`})
+        await response.json();
+        navigate('/');
       } catch(error) {
-        console.log(error);
+        alert(error);
       } finally {
-        setGeneratingImg(false);
+        setLoading(false);
       }
     } else {
-      alert('please enter a prompt');
+      alert('Please enter a prompt and generate an image')
     }
   }
 
