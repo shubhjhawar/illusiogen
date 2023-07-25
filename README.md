@@ -93,4 +93,4 @@ Contributions to Illusiogen are welcome and encouraged! Feel free to open issues
 
 ## Contact Me
 
-Feel free to drop an email at (shubhjhawar78@gmail.com)[shubhjhawar78@gmail.com] in case of any queries.
+Feel free to drop an email at shubhjhawar78@gmail.com in case of any queries.
